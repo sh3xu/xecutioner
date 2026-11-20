@@ -1,0 +1,100 @@
+packages/flutter/test/executors_test.dart
+  s_b5842352cc95af::t_4f7340b5c34181 1-121
+packages/flutter/pubspec.yaml
+  s_b5842352cc95af::t_533767b4d2249d 1-19
+packages/flutter/test/helpers_test.dart
+  s_b5842352cc95af::t_cd1c962ed68a05 1-76
+packages/flutter/scripts/generate_dart_types.mjs
+  s_b5842352cc95af::t_91dde4623333ea 1-34
+packages/protocol/package.json
+  s_b5842352cc95af::t_5901401db82dbe 21
+packages/flutter/lib/src/protocol/types.dart
+  s_b5842352cc95af::t_5fbd06a17316aa 3
+  s_b5842352cc95af::t_e055f199bdedb9 1-2,4-513
+README.md
+  s_b5842352cc95af::t_51578287bb3285 205
+  s_b5842352cc95af::t_cd0f0a7d02dfa2 37,51,54-55,60
+  s_b5842352cc95af::t_12f9269dbeb099 120-155,164-168
+  s_b5842352cc95af::t_cea22d912dcf7c 169
+packages/flutter/lib/src/navigation/go_router.dart
+  s_b5842352cc95af::t_105a1179f8aa4b 1-27,73-103,108-148,186
+  s_b5842352cc95af::t_a3a4f6cdf082e4 28-72,104-107,149-185
+packages/flutter/test/snapshot_test.dart
+  s_b5842352cc95af::t_f6840fbdedc5e6 1-50
+examples/flutter-chat-demo/.gitignore
+  s_b5842352cc95af::t_2e20a54469c238 1-6
+packages/flutter/test/context_reader_test.dart
+  s_b5842352cc95af::t_fb242999485f3e 1-95
+examples/flutter-chat-demo/test/run_demo_test.dart
+  s_b5842352cc95af::t_9f7e03c72fe677 1-81
+packages/flutter/.gitignore
+  s_b5842352cc95af::t_23a0ccfda1332c 1-6
+examples/flutter-chat-demo/README.md
+  s_b5842352cc95af::t_6bdc5707eb4e54 1-12
+packages/flutter/test/go_router_test.dart
+  s_b5842352cc95af::t_66289fe48d53bd 1-55,59-61
+  s_b5842352cc95af::t_ba6d8183cab64f 56-58
+examples/flutter-chat-demo/pubspec.yaml
+  s_b5842352cc95af::t_3267e9cb621ca4 1-15
+packages/flutter/lib/src/protocol/validate.dart
+  s_b5842352cc95af::t_a8bff386b26188 23,26,38
+  s_b5842352cc95af::t_3aca7222327e58 42,45,59,63,66,73,77,80,90
+  s_b5842352cc95af::t_a922df32b5ef7e 1-22,24-25,27-37,39-41,43-44,46-58,60-62,64-65,67-72,74-76,78-79,81-89,91
+packages/flutter/lib/src/client.dart
+  s_b5842352cc95af::t_cfe1a88c64a17f 1-174
+packages/flutter/lib/src/protocol/helpers.dart
+  s_b5842352cc95af::t_1838b4fdfaac99 163
+  s_b5842352cc95af::t_5bae3a1a54f967 1-2
+  s_b5842352cc95af::t_803085ee510be5 3-162,164-227,229-348
+  s_b5842352cc95af::t_01e39ad14b1112 228
+packages/flutter/lib/src/snapshot.dart
+  s_b5842352cc95af::t_5b2bcfedce5f66 1-139
+packages/flutter/lib/src/navigation/types.dart
+  s_b5842352cc95af::t_4f31dd550c5d16 1-20,32-33,35,38,40,43-76
+  s_b5842352cc95af::t_a6794970b263b9 21-31,34,36-37,39,41-42
+packages/flutter/lib/src/protocol/generated_types.g.dart
+  s_b5842352cc95af::t_e525e993ea79fe 1-23
+examples/flutter-chat-demo/lib/host_app.dart
+  s_b5842352cc95af::t_f0aaac1ef3d111 1-178
+examples/flutter-chat-demo/analysis_options.yaml
+  s_b5842352cc95af::t_bfaae27c1b5218 1
+packages/flutter/analysis_options.yaml
+  s_b5842352cc95af::t_7f52003507e492 1-5
+packages/flutter/lib/src/types.dart
+  s_b5842352cc95af::t_b891303e6ef4b6 1-125
+examples/flutter-chat-demo/bin/run_demo.dart
+  s_b5842352cc95af::t_17a05da5d36946 1-166
+packages/flutter/lib/src/navigation/navigation.dart
+  s_b5842352cc95af::t_83ccee4e319af9 1-3
+packages/flutter/lib/xecutioner_flutter.dart
+  s_b5842352cc95af::t_9218fc5f78c83f 1-9
+packages/flutter/lib/src/navigation/context_reader.dart
+  s_b5842352cc95af::t_f0bfc20af19a0f 73-74
+  s_b5842352cc95af::t_1263a8dc8d4d7d 1-71,75-98,100-127
+  s_b5842352cc95af::t_099afa046daeae 72,99
+packages/flutter/README.md
+  s_b5842352cc95af::t_58aaa563c7ca6e 1-61
+packages/flutter/lib/src/protocol/constants.dart
+  s_b5842352cc95af::t_c20b6910a2943b 1-40
+packages/flutter/lib/src/executors.dart
+  s_b5842352cc95af::t_e532ee6463737b 158-159,171-179
+  s_b5842352cc95af::t_782756746cb6db 1-157,160-170,180-387
+packages/flutter/lib/src/protocol/protocol.dart
+  s_b5842352cc95af::t_9a0beb7e96558b 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "620cc6155166836038acf98ecb98c3b09667c85a",
+  "prompts": {},
+  "sessions": {
+    "s_b5842352cc95af": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ee20f2db-14bb-42b5-8a9b-65a9fc495dc1",
+        "model": "default"
+      },
+      "human_author": "sh3xu <s43khu@gmail.com>"
+    }
+  }
+}
