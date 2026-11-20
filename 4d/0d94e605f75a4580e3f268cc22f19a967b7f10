@@ -1,0 +1,98 @@
+packages/server/src/plugin.test.ts
+  s_67c2a812746a4b::t_c774845678233b 1-9,11-161,188-231
+  s_67c2a812746a4b::t_8c5b64daaf5b56 162-187
+  s_67c2a812746a4b::t_c323d2596b0b7c 10
+packages/adapters/src/openai-agent.ts
+  s_67c2a812746a4b::t_4430769e4d4d37 1-2,4-41,47-199,204-241
+  s_67c2a812746a4b::t_c323d2596b0b7c 3,42-46,200-203
+packages/adapters/src/adapters.test.ts
+  s_67c2a812746a4b::t_3f9d27438705cb 10,12-13,15-17
+examples/rn-chat-demo/src/run-demo.ts
+  s_67c2a812746a4b::t_8a4b0e9e15ce54 110
+  s_67c2a812746a4b::t_0b9c2ec9bd0527 1,3,41-47,49,67,69
+packages/protocol/src/prompts.ts
+  s_67c2a812746a4b::t_7e7cadf191d91c 1-12
+docs/backend.md
+  s_67c2a812746a4b::t_c323d2596b0b7c 51-58,93-102,166-167,169-175,221-224
+  s_67c2a812746a4b::t_3263d51562d97f 3-5,20,23-24,26-29,32,34-37,39-44,47,49,60-62,65,67-74,76-78,80-92,103-105,108-112,115,117-120,123,126,129,132,135,138-140,142,145,147-159,162,168,177,182-184,193-195,199,203,210-214,219-220,225,235
+  s_67c2a812746a4b::t_38253b7611814d 163
+packages/adapters/README.md
+  s_67c2a812746a4b::t_6b7c16924dac1c 1-39
+packages/server/src/tools.ts
+  s_67c2a812746a4b::t_7b260289a13b4e 14,27
+packages/server/src/plugin.ts
+  s_67c2a812746a4b::t_5f2a30f7bd8267 8,22,28,30-31,33-35,45,50-56,64-77,79,81-86,94,103-108,112-119,124,129-175,178,187-189,200-209,219-220,223,225-228
+  s_67c2a812746a4b::t_c323d2596b0b7c 7,10,125-128
+packages/adapters/src/run-with-tools.ts
+  s_67c2a812746a4b::t_e0fb0b79cb6be9 1-109
+.cursor/rules/xecutioner.mdc
+  s_67c2a812746a4b::t_336351050b703e 11-12
+packages/server/src/channel.ts
+  s_67c2a812746a4b::t_09f95cf56d6eda 3-4,37-38,53-60,63,70-73,97-101,104-124,126-135,137-147,152-160,162,256-261,270-278
+  s_67c2a812746a4b::t_e183171f6b5d62 1
+  s_67c2a812746a4b::t_a125c8b21580ab 2,17-23,29,69,81-92,102-103,125,149-150,163-165,167-178,279
+  s_67c2a812746a4b::t_2a658101321efb 93
+packages/adapters/src/run-with-tools.test.ts
+  s_67c2a812746a4b::t_c323d2596b0b7c 1,3,6
+  s_67c2a812746a4b::t_6533f06a1a1062 2,4-5,7-103
+packages/adapters/src/vercel-ai.ts
+  s_67c2a812746a4b::t_acbf23fc701a2f 31-41
+packages/adapters/src/anthropic.ts
+  s_67c2a812746a4b::t_c323d2596b0b7c 8
+  s_67c2a812746a4b::t_15070b13fb5fbe 4-7,9-10
+packages/adapters/src/anthropic-agent.ts
+  s_67c2a812746a4b::t_c323d2596b0b7c 3,180-183
+  s_67c2a812746a4b::t_7138ac38928a1b 1-2,4-179,184-225
+README.md
+  s_67c2a812746a4b::t_bd51e355bb4686 5,23
+  s_67c2a812746a4b::t_be2f650f2a27f8 82-83,85-86,88-93
+  s_67c2a812746a4b::t_c323d2596b0b7c 9-14,65-69
+packages/server/src/create-xecutioner.ts
+  s_67c2a812746a4b::t_aa333240207b45 1-135
+packages/server/src/create-xecutioner-from-env.ts
+  s_67c2a812746a4b::t_fa413dd80640c5 1-2,4-53
+  s_67c2a812746a4b::t_c323d2596b0b7c 3
+packages/server/src/http-handlers.ts
+  s_67c2a812746a4b::t_fb9a29a8ae7c18 1,3-91,96-129
+  s_67c2a812746a4b::t_c323d2596b0b7c 2,92-95
+packages/adapters/src/index.ts
+  s_67c2a812746a4b::t_8fd5ab0ae7e104 2-4,11-34
+  s_67c2a812746a4b::t_c323d2596b0b7c 7
+packages/server/src/policy.ts
+  s_67c2a812746a4b::t_47ca3b7584c8e8 2
+  s_67c2a812746a4b::t_c323d2596b0b7c 159-161
+  s_67c2a812746a4b::t_c23715cff095f8 1,10-17,19,26-157,162-166
+  s_67c2a812746a4b::t_551ec38df2fed6 158
+packages/server/src/errors.ts
+  s_67c2a812746a4b::t_c1c659636ef8e0 1-21,26-44
+  s_67c2a812746a4b::t_c323d2596b0b7c 22-25
+docs/flutter.md
+  s_67c2a812746a4b::t_cb6f4d5bf0d80c 235-237
+  s_67c2a812746a4b::t_c323d2596b0b7c 16,148-155,242-247
+packages/protocol/src/index.ts
+  s_67c2a812746a4b::t_731d8f606814f4 4
+packages/server/README.md
+  s_67c2a812746a4b::t_1d4c824d77554d 3,10-27,30,43-44
+  s_67c2a812746a4b::t_c323d2596b0b7c 34-42
+packages/server/src/index.ts
+  s_67c2a812746a4b::t_1cf059ea4f8d0c 1-3,5-7,12-15,18-20,25-28,31-32
+  s_67c2a812746a4b::t_c323d2596b0b7c 4,8-11,16-17
+packages/adapters/src/openai.ts
+  s_67c2a812746a4b::t_281a58780f33b5 4-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4d0d94e605f75a4580e3f268cc22f19a967b7f10",
+  "prompts": {},
+  "sessions": {
+    "s_67c2a812746a4b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "cac60038-2e19-4e9b-a92a-f4a904f5c4e8",
+        "model": "default"
+      },
+      "human_author": "sh3xu <s43khu@gmail.com>"
+    }
+  }
+}
