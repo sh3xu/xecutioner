@@ -1,15 +1,20 @@
 name: xecutioner_flutter
 description: Flutter / Dart client for Xecutioner in-app UI control
-version: 0.1.0
+version: 0.2.0
 publish_to: none
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.16.0"
 
 dependencies:
+  flutter:
+    sdk: flutter
   web_socket_channel: ^3.0.2
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
   test: ^1.25.15
   lints: ^5.1.1
 
