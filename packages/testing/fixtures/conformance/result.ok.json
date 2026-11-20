@@ -1,0 +1,21 @@
+{
+  "type": "result",
+  "result": {
+    "callId": "call_tap_1",
+    "ok": true,
+    "snapshot": {
+      "snapshotId": "snap_2",
+      "screen": "OrderDetail",
+      "capturedAt": 1700000000000,
+      "elements": [
+        {
+          "id": "buy",
+          "role": "button",
+          "label": "Buy now",
+          "state": { "enabled": true, "visible": true },
+          "actions": ["tap"]
+        }
+      ]
+    }
+  }
+}

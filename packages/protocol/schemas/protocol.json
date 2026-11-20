@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xecutioner.dev/schemas/protocol.json",
+  "title": "XecutionerProtocol",
+  "description": "Wire protocol for in-app UI control",
+  "$defs": {
+    "ProtocolVersion": {
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "ErrorCode": {
+      "type": "string",
+      "enum": [
+        "stale_snapshot",
+        "element_not_found",
+        "not_actionable",
+        "blocked_by_policy",
+        "timeout",
+        "client_unavailable",
+        "invalid_arguments",
+        "internal_error",
+        "unknown_screen",
+        "navigation_unavailable"
+      ]
+    },
+    "ScreenDestination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "description"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "params": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "reachableFrom": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "requiresAuth": { "type": "boolean" },
+        "policy": {
+          "type": "string",
+          "enum": ["allow", "approval", "deny"]
+        },
+        "source": {
+          "type": "string",
+          "enum": ["declared", "auto", "runtime"],
+          "description": "Where this destination entry came from"
+        }
+      }
+    },
+    "AppContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["app", "current", "destinations"],
+      "properties": {
+        "app": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "description"],
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        },
+        "current": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["screenId", "stack"],
+          "properties": {
+            "screenId": { "type": "string" },
+            "params": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "stack": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "tabs": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "destinations": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ScreenDestination" }
+        }
+      }
+    },
+
+    "ElementState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "focused": { "type": "boolean" },
+        "checked": { "type": "boolean" },
+        "visible": { "type": "boolean" }
+      }
+    },
+    "Bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number" },
+        "height": { "type": "number" }
+      }
+    },
+    "UiElement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "role"],
+      "properties": {
+        "id": { "type": "string", "description": "Stable testID or generated per-snapshot ref" },
+        "role": { "type": "string" },
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "state": { "$ref": "#/$defs/ElementState" },
+        "bounds": { "$ref": "#/$defs/Bounds" },
+        "actions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/UiElement" }
+        },
+        "redacted": { "type": "boolean" }
+      }
+    },
+    "Snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshotId", "elements", "capturedAt"],
+      "properties": {
+        "snapshotId": { "type": "string" },
+        "screen": { "type": "string" },
+        "route": { "type": "string" },
+        "elements": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/UiElement" }
+        },
+        "capturedAt": { "type": "number" },
+        "tokenEstimate": { "type": "number" }
+      }
+    },
+    "CommandAction": {
+      "type": "string",
+      "enum": [
+        "tap",
+        "scroll",
+        "input",
+        "read_screen",
+        "wait_for",
+        "get_context",
+        "navigate",
+        "back"
+      ]
+    },
+    "Command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["callId", "action", "idempotencyKey", "deadline"],
+      "properties": {
+        "callId": { "type": "string" },
+        "action": { "$ref": "#/$defs/CommandAction" },
+        "snapshotId": { "type": "string" },
+        "idempotencyKey": { "type": "string" },
+        "deadline": { "type": "number" },
+        "elementId": { "type": "string" },
+        "text": { "type": "string" },
+        "direction": {
+          "type": "string",
+          "enum": ["up", "down", "left", "right"]
+        },
+        "amount": { "type": "number" },
+        "screenId": { "type": "string" },
+        "params": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "maxDestinations": { "type": "number" },
+        "waitCondition": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "elementId": { "type": "string" },
+            "labelContains": { "type": "string" },
+            "timeoutMs": { "type": "number" }
+          }
+        }
+      }
+    },
+    "CommandResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["callId", "ok"],
+      "properties": {
+        "callId": { "type": "string" },
+        "ok": { "type": "boolean" },
+        "errorCode": { "$ref": "#/$defs/ErrorCode" },
+        "errorMessage": { "type": "string" },
+        "snapshot": { "$ref": "#/$defs/Snapshot" },
+        "appContext": { "$ref": "#/$defs/AppContext" }
+      }
+    },
+
+    "Handshake": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "protocolVersion", "sessionId", "capabilities"],
+      "properties": {
+        "type": { "const": "handshake" },
+        "protocolVersion": { "$ref": "#/$defs/ProtocolVersion" },
+        "sessionId": { "type": "string" },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "clientInfo": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "platform": { "type": "string" },
+            "appVersion": { "type": "string" }
+          }
+        }
+      }
+    },
+    "WireMessage": {
+      "oneOf": [
+        { "$ref": "#/$defs/Handshake" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "command"],
+          "properties": {
+            "type": { "const": "command" },
+            "command": { "$ref": "#/$defs/Command" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "result"],
+          "properties": {
+            "type": { "const": "result" },
+            "result": { "$ref": "#/$defs/CommandResult" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "ping" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "pong" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "sessionId"],
+          "properties": {
+            "type": { "const": "client_unavailable" },
+            "sessionId": { "type": "string" },
+            "reason": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}

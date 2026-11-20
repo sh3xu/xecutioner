@@ -1,0 +1,10 @@
+{
+  "type": "handshake",
+  "protocolVersion": "0.1.0",
+  "sessionId": "session-demo",
+  "capabilities": ["tap", "scroll", "input", "read_screen", "wait_for"],
+  "clientInfo": {
+    "platform": "react-native",
+    "appVersion": "0.0.1"
+  }
+}

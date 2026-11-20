@@ -1,0 +1,11 @@
+{
+  "type": "command",
+  "command": {
+    "callId": "call_tap_1",
+    "action": "tap",
+    "elementId": "order-1",
+    "snapshotId": "snap_1",
+    "idempotencyKey": "idem_tap_1",
+    "deadline": 9999999999999
+  }
+}

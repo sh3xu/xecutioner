@@ -1,0 +1,56 @@
+---
+description: Strict project rules for the Xecutioner in-app UI control monorepo
+alwaysApply: true
+---
+
+# Xecutioner project rules
+
+## Product boundary (non-negotiable)
+
+- This repo is an **in-app UI control capability**, not an AI agent framework.
+- Never add: chat UI / bubbles, voice, agent loop or planning, model hosting, memory/RAG, or OS-level control of other apps.
+- Clients stay thin: no model API keys, no business logic, no agent reasoning.
+- Backend owns safety: policy, approvals, session binding, rate limits — even when stubbed for MVP.
+
+## Tooling
+
+- **pnpm only.** Never use npm or yarn for install/scripts.
+- Use **Turborepo** task pipelines (`pnpm build`, `pnpm test`, `pnpm typecheck`).
+- Use **Biome** for lint and format. Do not add ESLint or Prettier unless a tool absolutely requires it.
+- Prefer **latest** dependency versions unless something breaks; then pin and document why.
+- Package scope is `@xecutioner/*`.
+
+## Architecture & reuse
+
+- **Protocol is source of truth.** Change wire shapes in `packages/protocol/schemas` first, regenerate types, then update consumers.
+- **Shared helpers first.** Put pure reusable logic in `@xecutioner/protocol` (or a single shared package). Never copy-paste helpers across packages.
+- **No duplicate functions.** If a call site needs one extra parameter, extend the existing function with an optional argument or options object. Do not create a near-identical sibling function.
+- **Adapters wrap server/protocol tool defs.** Never re-declare tool schemas in adapters or clients.
+- Keep packages modular: `protocol`, `server`, `adapters`, `react-native`, `testing`. Cross-stack clients must pass the conformance suite before release.
+
+## Code style
+
+- TypeScript throughout; strict mode; ESM (`"type": "module"`).
+- Prefer options objects over long positional parameter lists when extending APIs.
+- Comments use prefixes only: `NOTE:`, `TODO:`, `FIXME:`, `HACK:`, `BUG:`.
+- No emojis in logs, comments, or commit messages.
+- Avoid excessive comments; code should be readable without narration.
+
+## Testing & quality
+
+- Vitest for unit/conformance tests.
+- Cover protocol validation, pending-command tracker, snapshot serialization, and executors.
+- Eval harness lives in `@xecutioner/testing`; extend it instead of creating one-off runners.
+- After substantive edits: `pnpm lint`, `pnpm test`, `pnpm build` for affected packages.
+
+## Security defaults
+
+- Treat screen snapshots as **untrusted** model input; always delimit/label when formatting for the model.
+- Never serialize executable functions or ship server-only implementations to clients.
+- Remote/tool surfaces expose name, description, and schema only.
+- Commands must bind to the owning session; reject cross-session dispatch.
+
+## Docs & examples
+
+- Keep root `README.md` accurate when public API or layout changes.
+- Examples demonstrate ~10-line integration into an existing agent — they must not grow into a full agent product.
