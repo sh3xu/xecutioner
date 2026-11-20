@@ -1,0 +1,133 @@
+.changeset/README.md
+  s_19bd9b0e95f11c::t_959887f8e46f27 1-8
+.changeset/config.json
+  s_19bd9b0e95f11c::t_d6062e22dd79c1 1-11
+README.md
+  s_19bd9b0e95f11c::t_b4ca6005342337 1-183
+biome.json
+  s_19bd9b0e95f11c::t_c4adcbc1053e31 1-39
+examples/rn-chat-demo/README.md
+  s_19bd9b0e95f11c::t_ac1e169542a148 1-11
+examples/rn-chat-demo/package.json
+  s_19bd9b0e95f11c::t_566d47295a333e 1-27
+examples/rn-chat-demo/src/integration.snippet.tsx
+  s_19bd9b0e95f11c::t_e9fe6ae27f8b32 1-30
+examples/rn-chat-demo/src/run-demo.test.ts
+  s_19bd9b0e95f11c::t_36d87da61d547d 1-32
+examples/rn-chat-demo/tsconfig.json
+  s_19bd9b0e95f11c::t_630ba06bc48261 1-9
+examples/rn-chat-demo/vitest.config.ts
+  s_19bd9b0e95f11c::t_147799c6e52398 1-7
+package.json
+  s_19bd9b0e95f11c::t_299f36f19d1799 1-26
+packages/adapters/package.json
+  s_19bd9b0e95f11c::t_07a35745fe968f 1-43
+packages/adapters/src/anthropic.ts
+  s_19bd9b0e95f11c::t_a102f9516b2d3a 1-40
+packages/adapters/src/common.ts
+  s_19bd9b0e95f11c::t_e9b50af22a9451 1-28
+packages/adapters/src/index.ts
+  s_19bd9b0e95f11c::t_957d523f704018 1-8
+packages/adapters/src/openai.ts
+  s_19bd9b0e95f11c::t_7d6b384f525789 1-46
+packages/adapters/src/vercel-ai.ts
+  s_19bd9b0e95f11c::t_911ee4c9a78c0d 1-30
+packages/adapters/tsconfig.json
+  s_19bd9b0e95f11c::t_9432d0a27e52e3 1-11
+packages/adapters/vitest.config.ts
+  s_19bd9b0e95f11c::t_2c63326e88f887 1-7
+packages/protocol/package.json
+  s_19bd9b0e95f11c::t_fa5ad5b1cf351c 1-32
+packages/protocol/scripts/generate.ts
+  s_19bd9b0e95f11c::t_bc5436a885a4d1 1-39
+packages/protocol/src/helpers.ts
+  s_19bd9b0e95f11c::t_29ee9869b0a95c 1-311
+packages/protocol/src/index.ts
+  s_19bd9b0e95f11c::t_b6bdc53ba70d4e 1-5
+packages/protocol/tsconfig.json
+  s_19bd9b0e95f11c::t_b45797ccd2e411 1-10
+packages/protocol/vitest.config.ts
+  s_19bd9b0e95f11c::t_82c93986695f53 1-7
+packages/react-native/package.json
+  s_19bd9b0e95f11c::t_1973f16b11fc16 1-42
+packages/react-native/src/client.ts
+  s_19bd9b0e95f11c::t_d943642d5aafae 1-137
+packages/react-native/src/executors.test.ts
+  s_19bd9b0e95f11c::t_0556bba1369a0e 1-128
+packages/react-native/src/index.ts
+  s_19bd9b0e95f11c::t_2b7c4834261fd3 1-20
+packages/react-native/src/navigation/index.ts
+  s_19bd9b0e95f11c::t_c85447d7864ce7 1-20
+packages/react-native/src/snapshot.test.ts
+  s_19bd9b0e95f11c::t_e5187987c77ab0 1-46
+packages/react-native/src/snapshot.ts
+  s_19bd9b0e95f11c::t_b1bab44d9b5b05 1-125
+packages/react-native/tsconfig.json
+  s_19bd9b0e95f11c::t_63024c52c48c99 1-12
+packages/react-native/vitest.config.ts
+  s_19bd9b0e95f11c::t_098aadf2ccc140 1-7
+packages/server/package.json
+  s_19bd9b0e95f11c::t_7407113c7c2d56 1-32
+packages/server/src/index.ts
+  s_19bd9b0e95f11c::t_2713058809d327 1-17
+packages/server/src/pending-tracker.test.ts
+  s_19bd9b0e95f11c::t_94f20737447535 1-40
+packages/server/src/pending-tracker.ts
+  s_19bd9b0e95f11c::t_2fe2eb87716a76 1-122
+packages/server/src/plugin.ts
+  s_19bd9b0e95f11c::t_02aeb73eb9ecb7 1-123
+packages/server/src/policy.ts
+  s_19bd9b0e95f11c::t_27483b5d15287c 1-16
+packages/server/src/session-router.ts
+  s_19bd9b0e95f11c::t_14c56c6ea8d5bc 1-75
+packages/server/tsconfig.json
+  s_19bd9b0e95f11c::t_ce58bff9362d5d 1-11
+packages/server/vitest.config.ts
+  s_19bd9b0e95f11c::t_f2f604229ebf01 1-7
+packages/testing/fixtures/conformance/command.tap.json
+  s_19bd9b0e95f11c::t_7d5690d2d34d49 1-11
+packages/testing/fixtures/conformance/handshake.valid.json
+  s_19bd9b0e95f11c::t_71869b815900c6 1-10
+packages/testing/fixtures/conformance/result.ok.json
+  s_19bd9b0e95f11c::t_aa0aac9a383424 1-21
+packages/testing/package.json
+  s_19bd9b0e95f11c::t_326bfbdf31274e 1-35
+packages/testing/src/conformance.test.ts
+  s_19bd9b0e95f11c::t_5a81e9f8417447 1-9
+packages/testing/src/conformance.ts
+  s_19bd9b0e95f11c::t_c53a2d7df76117 1-44
+packages/testing/src/eval.ts
+  s_19bd9b0e95f11c::t_ea2fe31f93c6e9 1-55
+packages/testing/src/index.ts
+  s_19bd9b0e95f11c::t_735516b3f6941f 1-13
+packages/testing/src/mock-agent.ts
+  s_19bd9b0e95f11c::t_d2033238f8b2eb 1-39
+packages/testing/src/mock-client.ts
+  s_19bd9b0e95f11c::t_006dfca5b183f6 1-51
+packages/testing/tsconfig.json
+  s_19bd9b0e95f11c::t_ffc5ec7d0c4ece 1-11
+packages/testing/vitest.config.ts
+  s_19bd9b0e95f11c::t_05b37acdf061dc 1-7
+pnpm-workspace.yaml
+  s_19bd9b0e95f11c::t_f085e1335b4350 1-5
+spec/protocol-v0.1.md
+  s_19bd9b0e95f11c::t_d9ee6511b4c41d 1-47
+tsconfig.base.json
+  s_19bd9b0e95f11c::t_22aa372126e670 1-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c1a73fe1b8519f0d3ef836f8e05a7082a597dad2",
+  "prompts": {},
+  "sessions": {
+    "s_19bd9b0e95f11c": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "f36b0c07-5f47-41b9-8d9f-94d5b4e2c254",
+        "model": "default"
+      },
+      "human_author": "sh3xu <s43khu@gmail.com>"
+    }
+  }
+}
