@@ -28,3 +28,14 @@ export function toVercelAiTools(
 
   return tools;
 }
+
+/**
+ * Ready-to-pass UI tools for generateText / streamText.
+ */
+export function createVercelAiUiTools(
+  plugin: UiPlugin,
+  sessionId: string,
+  options?: { timeoutMs?: number },
+): Record<string, VercelAiTool> {
+  return toVercelAiTools(plugin, sessionId, options);
+}

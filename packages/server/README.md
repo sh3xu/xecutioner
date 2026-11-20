@@ -1,34 +1,44 @@
 # @xecutioner/server
 
-Backend UI-control plugin: WebSocket channel, session router, pending-command tracker, and `ui_*` tool invoke.
+Backend UI-control plugin: WebSocket channel, session router, pending-command tracker, policy presets, and lifecycle helpers.
 
 **Full guide:** [Backend usage](../../docs/backend.md) · Flutter client: [Flutter usage](../../docs/flutter.md)
 
 ## Quickstart
 
 ```ts
-import { createUiPlugin } from "@xecutioner/server";
-import { toVercelAiTools } from "@xecutioner/adapters/vercel-ai";
+import { createXecutioner } from "@xecutioner/server";
+import { createOpenAiAgent } from "@xecutioner/adapters/openai";
 
-const ui = createUiPlugin();
-await ui.listen({ port: 8787 });
+const x = createXecutioner({
+  port: 8787,
+  path: "/xecutioner",
+});
+await x.listen();
 
-const sessionId = "demo-session";
-const tools = {
-  ...toVercelAiTools(ui, sessionId),
-};
+const agent = createOpenAiAgent(x.plugin, {
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: "gpt-4o-mini",
+});
+
+await agent.run({
+  goal: "Open settings",
+  sessionId: "demo-session",
+});
 ```
 
-Clients (RN / Flutter) connect to `ws://host:8787/xecutioner` with the same `sessionId`.
+Clients connect to `ws://host:8787/xecutioner` with the same `sessionId`.
 
 ## API
 
-| Method | Purpose |
-| --- | --- |
-| `listen` | Start WS (`port`, `host`, `path`) |
-| `invokeTool` | Run a named `ui_*` tool for a session |
-| `dispatch` | Send a raw `Command` and await `CommandResult` |
-| `isOnline` | Whether the session’s client is connected |
-| `close` | Shut down |
+| Export                                                                     | Purpose                                     |
+| -------------------------------------------------------------------------- | ------------------------------------------- |
+| `createXecutioner`                                                         | Lifecycle: listen / close / wait / sessions |
+| `createXecutionerFromEnv`                                                  | `XECUTIONER_*` env wiring                   |
+| `createUiPlugin`                                                           | Low-level plugin                            |
+| `waitForClient` (on plugin / instance)                                     | Event-based online wait                     |
+| `XecutionerError`                                                          | Typed errors                                |
+| `handleStatus` / `handleChat`                                              | Framework-agnostic HTTP helpers             |
+| `createAllowlistPolicy` / `createDenyListPolicy` / `createRateLimitPolicy` | Policy presets                              |
 
-Adapters: `toVercelAiTools`, `toOpenAiTools`, `toAnthropicTools` from `@xecutioner/adapters`.
+Adapters: `createOpenAiAgent`, `createVercelAiUiTools`, `toOpenAiTools`, … from `@xecutioner/adapters`.

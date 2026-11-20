@@ -1,6 +1,13 @@
 import type { UiPlugin } from "@xecutioner/server";
 import { bindUiToolHandlers, listDefinitions } from "./common.js";
 
+export {
+  type AnthropicAgentOptions,
+  type AnthropicAgentRunInput,
+  type AnthropicAgentRunResult,
+  createAnthropicAgent,
+} from "./anthropic-agent.js";
+
 export type AnthropicTool = {
   name: string;
   description: string;

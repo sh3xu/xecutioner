@@ -13,7 +13,7 @@ Path dependency (monorepo):
 # pubspec.yaml
 dependencies:
   xecutioner_flutter:
-    path: ../packages/flutter   # or your relative path
+    path: ../packages/flutter # or your relative path
 ```
 
 ```bash
@@ -145,14 +145,14 @@ HostUiNode buildHostTree() {
 }
 ```
 
-| Field | Purpose |
-| --- | --- |
-| `testID` | Stable element id (preferred over generated `ref_*`) |
-| `accessibilityRole` | Maps to actions (`button` → tap, `textbox` → input, etc.) |
-| `accessibilityLabel` / `accessibilityValue` | What the model sees |
-| `xecutionerRedact` | Redact sensitive fields in snapshots |
-| `children` | Nested tree |
-| `actions` | Optional explicit actions override |
+| Field                                       | Purpose                                                   |
+| ------------------------------------------- | --------------------------------------------------------- |
+| `testID`                                    | Stable element id (preferred over generated `ref_*`)      |
+| `accessibilityRole`                         | Maps to actions (`button` → tap, `textbox` → input, etc.) |
+| `accessibilityLabel` / `accessibilityValue` | What the model sees                                       |
+| `xecutionerRedact`                          | Redact sensitive fields in snapshots                      |
+| `children`                                  | Nested tree                                               |
+| `actions`                                   | Optional explicit actions override                        |
 
 ## Applying actions (`performAction`)
 
@@ -232,18 +232,19 @@ NavigationAdapter(
 
 ## Session binding
 
-- Generate or receive a `sessionId` from your backend (chat session, auth session, etc.).
-- Pass the **same** id to `createUiClient` and to the server tool binders (`toVercelAiTools(ui, sessionId)`).
+- Prefer a backend-minted `sessionId` (chat session, auth session, booking id, etc.).
+- Pass the **same** id to `Xecutioner.init` / `createUiClient` and to `createOpenAiAgent` / `createVercelAiUiTools`.
+- Do not rely on client auto-generated `xec_*` ids unless the backend observes `listOnlineSessions()` / `onSessionConnected` before binding tools.
 - Commands for another session are never delivered to this client.
 
 ## Lifecycle
 
-| Call | When |
-| --- | --- |
-| `client.connect()` | After hooks are ready (typically after first frame / router mount) |
-| `client.isConnected()` | Gate UI that depends on AI control |
-| `client.disconnect()` | On logout, dispose, or background if you do not want remote control |
-| `client.executeLocal(command)` | Tests / demos without a live server |
+| Call                           | When                                                                |
+| ------------------------------ | ------------------------------------------------------------------- |
+| `client.connect()`             | After hooks are ready (typically after first frame / router mount)  |
+| `client.isConnected()`         | Gate UI that depends on AI control                                  |
+| `client.disconnect()`          | On logout, dispose, or background if you do not want remote control |
+| `client.executeLocal(command)` | Tests / demos without a live server                                 |
 
 ## Local demo (no server)
 

@@ -11,6 +11,7 @@ import {
   UI_TOOL_DEFINITIONS,
   type UiToolName,
 } from "@xecutioner/protocol";
+import { XecutionerError } from "./errors.js";
 import type { UiPlugin } from "./plugin.js";
 
 export type ToolInvokeArgs = Record<string, unknown>;
@@ -23,7 +24,7 @@ export type ToolInvokeResult = {
 function actionFromTool(name: UiToolName): CommandAction {
   const def = getToolDefinition(name);
   if (!def) {
-    throw new Error(`Unknown tool: ${name}`);
+    throw new XecutionerError("UNKNOWN_TOOL", `Unknown tool: ${name}`);
   }
   return def.action;
 }

@@ -1,6 +1,13 @@
 import type { UiPlugin } from "@xecutioner/server";
 import { bindUiToolHandlers, listDefinitions } from "./common.js";
 
+export {
+  createOpenAiAgent,
+  type OpenAiAgentOptions,
+  type OpenAiAgentRunInput,
+  type OpenAiAgentRunResult,
+} from "./openai-agent.js";
+
 export type OpenAiTool = {
   type: "function";
   function: {

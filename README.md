@@ -2,24 +2,25 @@
 
 **Install once, and your existing agent can operate your app on every client stack.**
 
-Xecutioner is a backend plugin plus thin client libraries that give any developer’s AI agent the ability to **see and operate their app’s UI** (tap, scroll, input, read screen). You keep your chat UI, model, prompts, and agent loop. Xecutioner owns the UI-control capability and nothing else.
+Xecutioner is a backend plugin plus thin client libraries that give any developer’s AI agent the ability to **see and operate their app’s UI** (tap, scroll, input, read screen). You keep your chat UI and product logic. Xecutioner owns UI tools, sessions, policy, and optional UI-tool agent runners.
 
 ## Positioning
 
-| You own                             | Xecutioner owns                                |
-| ----------------------------------- | ---------------------------------------------- |
-| Chat UI, model, prompts, agent loop | UI tools, protocol, session routing, execution |
-| App business logic                  | Snapshot serialization & action executors      |
-| Host approval UI rendering          | When approval is required (policy)             |
+| You own                       | Xecutioner owns                                             |
+| ----------------------------- | ----------------------------------------------------------- |
+| Chat UI, product routes, auth | UI tools, protocol, session routing, execution              |
+| App business logic            | Snapshot serialization & action executors                   |
+| Host approval UI rendering    | When approval is required (policy)                          |
+| Model API keys                | Optional `createOpenAiAgent` / `runWithTools` UI-tool loops |
 
 ### Non-goals
 
 - Chat UI or bubbles
 - Voice
-- Agent loop / planning
 - Model hosting
 - Memory or RAG
 - OS-level control of other apps
+- Full agent products / planners (optional runners are UI-tool loops only)
 
 ## Architecture
 
@@ -61,11 +62,11 @@ Tooling: **pnpm** workspaces, **Turborepo**, **Biome**, **Vitest**, **Changesets
 
 ## Docs
 
-| Guide | Audience |
-| --- | --- |
-| [docs/backend.md](docs/backend.md) | Start the server, bind `ui_*` tools to your agent, session pairing |
-| [docs/flutter.md](docs/flutter.md) | Install the Dart client, host tree, go_router, connect to the server |
-| [spec/protocol-v0.1.md](spec/protocol-v0.1.md) | Wire protocol |
+| Guide                                          | Audience                                                             |
+| ---------------------------------------------- | -------------------------------------------------------------------- |
+| [docs/backend.md](docs/backend.md)             | Start the server, bind `ui_*` tools to your agent, session pairing   |
+| [docs/flutter.md](docs/flutter.md)             | Install the Dart client, host tree, go_router, connect to the server |
+| [spec/protocol-v0.1.md](spec/protocol-v0.1.md) | Wire protocol                                                        |
 
 ## Quickstart
 
@@ -78,16 +79,18 @@ pnpm test
 ### Server
 
 ```ts
-import { createUiPlugin } from "@xecutioner/server";
-import { toVercelAiTools } from "@xecutioner/adapters/vercel-ai";
+import { createXecutioner } from "@xecutioner/server";
+import { createOpenAiAgent } from "@xecutioner/adapters/openai";
 
-const ui = createUiPlugin();
-await ui.listen({ port: 8787 });
+const x = createXecutioner({ port: 8787 });
+await x.listen();
 
-const tools = {
-  ...toVercelAiTools(ui, sessionId),
-  // ...yourTools
-};
+const agent = createOpenAiAgent(x.plugin, {
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: "gpt-4o-mini",
+});
+
+await agent.run({ goal: "Open settings", sessionId });
 ```
 
 ### React Native (thin client)

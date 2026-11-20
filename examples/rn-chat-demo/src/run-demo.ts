@@ -1,26 +1,12 @@
-import { toVercelAiTools } from "@xecutioner/adapters/vercel-ai";
+import { createVercelAiUiTools } from "@xecutioner/adapters/vercel-ai";
 import { createAppContextReader, createUiClient } from "@xecutioner/react-native";
-import { createUiPlugin } from "@xecutioner/server";
+import { createXecutioner } from "@xecutioner/server";
 import { computeEvalMetrics, runScriptedAgent, SAMPLE_EVAL_TASKS } from "@xecutioner/testing";
 import WebSocket from "ws";
 import { createDemoHost, createDemoPerformAction } from "./host-app.js";
 
 const SESSION_ID = "demo-session";
 const PORT = 8787;
-
-async function waitForOnline(
-  isOnline: () => boolean,
-  options?: { timeoutMs?: number },
-): Promise<void> {
-  const timeoutMs = options?.timeoutMs ?? 5_000;
-  const started = Date.now();
-  while (!isOnline()) {
-    if (Date.now() - started > timeoutMs) {
-      throw new Error("Client did not connect in time");
-    }
-    await new Promise((r) => setTimeout(r, 50));
-  }
-}
 
 async function main(): Promise<void> {
   const host = createDemoHost();
@@ -52,9 +38,15 @@ async function main(): Promise<void> {
     ],
   });
 
-  const plugin = createUiPlugin();
-  const { port } = await plugin.listen({ port: PORT, host: "127.0.0.1" });
+  const x = createXecutioner({
+    port: PORT,
+    host: "127.0.0.1",
+    defaultSessionId: SESSION_ID,
+  });
+  const info = await x.listen();
+  const port = info?.port ?? PORT;
   const url = `ws://127.0.0.1:${port}/xecutioner`;
+  const plugin = x.plugin;
 
   const client = createUiClient({
     url,
@@ -72,9 +64,9 @@ async function main(): Promise<void> {
   });
 
   await client.connect();
-  await waitForOnline(() => plugin.isOnline(SESSION_ID));
+  await x.waitForClient(SESSION_ID);
 
-  const tools = toVercelAiTools(plugin, SESSION_ID);
+  const tools = createVercelAiUiTools(plugin, SESSION_ID);
   console.log("Registered UI tools:", Object.keys(tools).join(", "));
 
   const steps = await runScriptedAgent(plugin, SESSION_ID, [
@@ -115,7 +107,7 @@ async function main(): Promise<void> {
     steps.every((s) => s.ok);
 
   client.disconnect();
-  await plugin.close();
+  await x.close();
 
   if (!success) {
     console.error("Demo task failed");

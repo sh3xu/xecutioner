@@ -7,9 +7,14 @@ import { toVercelAiTools } from "./vercel-ai.js";
 
 function mockPlugin(): UiPlugin {
   return {
-    listen: async () => ({ port: 0, host: "127.0.0.1" }),
+    listen: async () => ({ port: 0, host: "127.0.0.1", path: "/xecutioner", attached: false }),
     close: async () => undefined,
+    isStarted: () => true,
+    getListenInfo: () => ({ port: 0, host: "127.0.0.1", path: "/xecutioner", attached: false }),
     isOnline: () => true,
+    listOnlineSessions: () => ["s1"],
+    requireOnlineSession: (id) => id ?? "s1",
+    waitForClient: async () => undefined,
     dispatch: async (sessionId, command) => ({
       callId: command.callId,
       ok: true,
