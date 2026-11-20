@@ -34,7 +34,7 @@ Developer's agent (their loop, model, chat UI)
    ├─ Pending-command tracker
    └─ WebSocket channel
    ▼
-@xecutioner/react-native (more clients later)
+@xecutioner/react-native | xecutioner_flutter
    ├─ Snapshot serializer
    ├─ Executors (tap, scroll, input, wait_for)
    └─ Host hooks (AI acting, approval)
@@ -48,14 +48,16 @@ packages/
   server/         # plugin core, router, WS channel, tools
   adapters/       # vercel-ai, openai, anthropic exporters
   react-native/   # RN / host-tree client
+  flutter/        # Dart / Flutter client (pub package; outside pnpm)
   testing/        # mocks, conformance fixtures, eval stubs
 examples/
-  rn-chat-demo/   # end-to-end scripted demo
+  rn-chat-demo/       # end-to-end scripted demo (WS + server)
+  flutter-chat-demo/  # Dart client scripted demo (executeLocal)
 spec/
   protocol-v0.1.md
 ```
 
-Tooling: **pnpm** workspaces, **Turborepo**, **Biome**, **Vitest**, **Changesets**.
+Tooling: **pnpm** workspaces, **Turborepo**, **Biome**, **Vitest**, **Changesets**. Flutter client uses **Dart** (`dart pub` / `dart test`) and is not part of the pnpm workspace.
 
 ## Quickstart
 
@@ -115,6 +117,42 @@ const client = createUiClient({
 await client.connect();
 ```
 
+### Flutter (thin client)
+
+```dart
+import 'package:xecutioner_flutter/xecutioner_flutter.dart';
+
+final contextReader = createAppContextReader(
+  CreateAppContextReaderOptions(
+    app: const AppInfo(name: 'Shop', description: 'Orders and checkout'),
+    navigation: createGoRouterAdapter(
+      CreateGoRouterAdapterOptions(getRouter: () => router),
+    ),
+    screens: const [
+      ScreenDefinition(id: 'orders', title: 'Orders', description: 'List of past orders'),
+    ],
+  ),
+);
+
+final client = createUiClient(
+  UiClientOptions(
+    url: 'ws://localhost:8787/xecutioner',
+    sessionId: sessionId,
+    hooks: HostHooks(
+      getRootNode: () => hostTree,
+      contextReader: contextReader,
+      onAiActing: (acting) => setBanner(acting),
+    ),
+  ),
+);
+await client.connect();
+```
+
+```bash
+cd packages/flutter && dart pub get && dart test
+cd examples/flutter-chat-demo && dart pub get && dart run bin/run_demo.dart
+```
+
 ### Demo (no device / no API key)
 
 ```bash
@@ -122,6 +160,12 @@ pnpm --filter @xecutioner/rn-chat-demo start
 ```
 
 Runs a WebSocket server, connects a mock host UI tree, and a **scripted agent** completes a multi-screen task via UI tools.
+
+```bash
+cd examples/flutter-chat-demo && dart run bin/run_demo.dart
+```
+
+Runs the same multi-screen task against the Dart client via `executeLocal` (no Node server required).
 
 ## Tools
 
@@ -158,7 +202,7 @@ Adapters export the same definitions for **Vercel AI SDK**, **OpenAI**, and **An
 1. **Reliability** — stale detection hardening, wait_for polish, virtualized lists, semantic app tools, readiness audit
 2. **Safety** — full policy engine, approvals, redaction rules, injection suite, audit log, kill switch
 3. **Transport & scale** — stateless piggyback, Redis routing, MCP wrapper
-4. **Clients** — Android, iOS, Flutter, web (conformance-gated)
+4. **Clients** — Android, iOS, web (conformance-gated); Flutter client (`xecutioner_flutter`) ships as a Dart package in `packages/flutter`
 5. **DX** — docs, trace viewer, OpenTelemetry, publishing
 
 ## Success metrics

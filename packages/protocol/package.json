@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "generate": "tsx scripts/generate.ts",
+    "generate:dart": "node ../flutter/scripts/generate_dart_types.mjs",
     "build": "pnpm generate && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
