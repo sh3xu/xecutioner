@@ -198,12 +198,13 @@ class Xecutioner {
         autoReconnect: config.autoReconnect,
         initialReconnectDelay: config.initialReconnectDelay,
         maxReconnectDelay: config.maxReconnectDelay,
+        onLog: (msg) => _log(msg),
         onConnectionStatusChanged: (connected) {
           if (!_disposed) {
             _connectionController.add(connected);
             _log(connected
-                ? 'connected to $url (session $_sessionId)'
-                : 'connection lost; will reconnect');
+                ? '[STATUS] Connected to $url (session $_sessionId)'
+                : '[STATUS] Connection lost; will attempt reconnect');
           }
         },
       ),
@@ -393,14 +394,25 @@ class Xecutioner {
   }
 
   Future<void> _performAction(PerformActionRequest request) async {
+    _log(
+      '[ACTION] Dispatching "${request.action}" on "${request.elementId}"'
+      '${request.text != null ? ' (text="${request.text}")' : ''}',
+    );
     try {
       await actions.dispatch(request);
+      _log('[ACTION] ✓ Handled "${request.action}" on "${request.elementId}" successfully');
     } catch (error) {
       final fallback = config.performAction;
-      if (fallback == null) rethrow;
-      _log('registry could not handle ${request.action} on '
-          '${request.elementId} ($error); delegating to host performAction');
+      if (fallback == null) {
+        _log('[ACTION] ✕ Failed "${request.action}" on "${request.elementId}": $error');
+        rethrow;
+      }
+      _log(
+        '[ACTION] Registry miss for "${request.action}" on "${request.elementId}" ($error); '
+        'delegating to host fallback performAction',
+      );
       await fallback(request);
+      _log('[ACTION] ✓ Handled by fallback performAction');
     }
   }
 
@@ -409,13 +421,18 @@ class Xecutioner {
     if (elementId != null) {
       final decision = config.policy.checkElement(elementId);
       if (decision == XecutionerPolicyDecision.deny) {
-        _log('denied by policy: $elementId');
+        _log('[POLICY] ✕ BLOCKED BY POLICY: element "$elementId" is denied');
         return false;
       }
       if (decision == XecutionerPolicyDecision.approval) {
+        _log('[POLICY] ⚠ USER APPROVAL REQUIRED for element "$elementId"');
         final handler = config.onApprovalRequest;
-        if (handler != null) return handler(request);
-        _log('approval required for $elementId (no handler; allowing)');
+        if (handler != null) {
+          final approved = await handler(request);
+          _log('[POLICY] User approval result for "$elementId": ${approved ? "ALLOWED" : "DENIED"}');
+          return approved;
+        }
+        _log('[POLICY] No onApprovalRequest handler provided; allowing "$elementId" by default');
         return true;
       }
     }
@@ -424,13 +441,18 @@ class Xecutioner {
     if (request.action == 'navigate' && screenId != null) {
       final decision = config.policy.checkScreen(screenId);
       if (decision == XecutionerPolicyDecision.deny) {
-        _log('denied by policy: screen $screenId');
+        _log('[POLICY] ✕ BLOCKED BY POLICY: screen "$screenId" is denied');
         return false;
       }
       if (decision == XecutionerPolicyDecision.approval) {
+        _log('[POLICY] ⚠ USER APPROVAL REQUIRED for navigation to "$screenId"');
         final handler = config.onApprovalRequest;
-        if (handler != null) return handler(request);
-        _log('approval required for screen $screenId (no handler; allowing)');
+        if (handler != null) {
+          final approved = await handler(request);
+          _log('[POLICY] User approval result for screen "$screenId": ${approved ? "ALLOWED" : "DENIED"}');
+          return approved;
+        }
+        _log('[POLICY] No onApprovalRequest handler provided; allowing screen "$screenId" by default');
         return true;
       }
     }
