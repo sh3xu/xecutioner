@@ -1,0 +1,29 @@
+packages/server/README.md
+  s_b5842352cc95af::t_260dc279e41bee 1-34
+examples/flutter-chat-demo/README.md
+  s_b5842352cc95af::t_b515801bef0b31 12-13
+docs/flutter.md
+  s_b5842352cc95af::t_364e6e925ce56a 1-273
+docs/backend.md
+  s_b5842352cc95af::t_68b1ab0988d088 1-215
+README.md
+  s_b5842352cc95af::t_5db6086bec3903 62-69
+packages/flutter/README.md
+  s_b5842352cc95af::t_c0d4ff37da5135 3,7-16,23-26,28-41,47,50,52,59-83,88,94,98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1df7157d1b503fb146876ac4d1ffc7107c868bda",
+  "prompts": {},
+  "sessions": {
+    "s_b5842352cc95af": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ee20f2db-14bb-42b5-8a9b-65a9fc495dc1",
+        "model": "default"
+      },
+      "human_author": "sh3xu <s43khu@gmail.com>"
+    }
+  }
+}
