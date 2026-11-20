@@ -59,6 +59,14 @@ spec/
 
 Tooling: **pnpm** workspaces, **Turborepo**, **Biome**, **Vitest**, **Changesets**. Flutter client uses **Dart** (`dart pub` / `dart test`) and is not part of the pnpm workspace.
 
+## Docs
+
+| Guide | Audience |
+| --- | --- |
+| [docs/backend.md](docs/backend.md) | Start the server, bind `ui_*` tools to your agent, session pairing |
+| [docs/flutter.md](docs/flutter.md) | Install the Dart client, host tree, go_router, connect to the server |
+| [spec/protocol-v0.1.md](spec/protocol-v0.1.md) | Wire protocol |
+
 ## Quickstart
 
 ```bash
