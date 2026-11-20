@@ -292,15 +292,25 @@ class ExecutionerActions {
   Future<void> dispatch(PerformActionRequest request) async {
     final element = _find(request.elementId);
     if (element == null) {
+      final sample = _elements.keys.take(8).join(', ');
+      final more = _elements.length > 8 ? ' (+${_elements.length - 8} more)' : '';
       throw ExecutionerActionException(
         'element_not_found',
-        'Element not found: ${request.elementId}',
+        'Element "${request.elementId}" not found in ExecutionerActions. '
+        'Registered elements: [$sample$more]',
       );
     }
     if (element.isVisible == false) {
       throw ExecutionerActionException(
         'not_actionable',
-        'Element ${request.elementId} is not visible',
+        'Element "${request.elementId}" is registered, but currently not visible '
+        '(visibleGetter returned false). Check if current screen matches.',
+      );
+    }
+    if (element.isEnabled == false) {
+      throw ExecutionerActionException(
+        'not_actionable',
+        'Element "${request.elementId}" is currently disabled (enabledGetter returned false).',
       );
     }
 
