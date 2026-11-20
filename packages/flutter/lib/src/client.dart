@@ -21,6 +21,11 @@ class UiClientOptions {
     required this.hooks,
     this.channelFactory,
     this.protocols,
+    this.clientInfo,
+    this.autoReconnect = true,
+    this.initialReconnectDelay = const Duration(seconds: 1),
+    this.maxReconnectDelay = const Duration(seconds: 30),
+    this.onConnectionStatusChanged,
   });
 
   final String url;
@@ -30,26 +35,51 @@ class UiClientOptions {
   /// NOTE: Inject WebSocket channel for tests / custom transports.
   final WebSocketChannelFactory? channelFactory;
   final Iterable<String>? protocols;
+
+  /// Extra fields merged into the handshake `clientInfo` object.
+  final Map<String, dynamic>? clientInfo;
+
+  /// Automatically reconnect when the WebSocket connection is lost.
+  final bool autoReconnect;
+
+  /// Starting delay for exponential backoff.
+  final Duration initialReconnectDelay;
+
+  /// Maximum delay between reconnection attempts.
+  final Duration maxReconnectDelay;
+
+  /// Callback notified whenever connection state changes.
+  final void Function(bool connected)? onConnectionStatusChanged;
 }
 
 abstract class UiClient {
   Future<void> connect();
   void disconnect();
+  void dispose();
   bool isConnected();
   Snapshot? getLastSnapshot();
 
   /// Execute locally without the network (useful for demos/tests).
   Future<CommandResult> executeLocal(Command command);
+
+  /// Trigger an immediate reconnection attempt (e.g. when app resumes from background).
+  Future<void> reconnectNow();
 }
 
 class _UiClientImpl implements UiClient {
-  _UiClientImpl(this._options);
+  _UiClientImpl(this._options) : _currentDelay = _options.initialReconnectDelay;
 
   final UiClientOptions _options;
   WebSocketChannel? _channel;
   StreamSubscription<dynamic>? _subscription;
   Snapshot? _lastSnapshot;
   bool _connected = false;
+  bool _manuallyDisconnected = false;
+  bool _disposed = false;
+
+  Timer? _reconnectTimer;
+  Duration _currentDelay;
+  Completer<void>? _handshakeCompleter;
 
   late final ExecuteContext _ctx = ExecuteContext(
     hooks: _options.hooks,
@@ -72,7 +102,9 @@ class _UiClientImpl implements UiClient {
   void _send(Map<String, dynamic> message) {
     final channel = _channel;
     if (channel == null) return;
-    channel.sink.add(jsonEncode(message));
+    try {
+      channel.sink.add(jsonEncode(message));
+    } catch (_) {}
   }
 
   Future<void> _handleCommand(Command command) async {
@@ -101,23 +133,24 @@ class _UiClientImpl implements UiClient {
     }
   }
 
-  @override
-  Future<void> connect() async {
-    final completer = Completer<void>();
+  void _cleanupSocket() {
+    unawaited(_subscription?.cancel());
+    _subscription = null;
+    try {
+      _channel?.sink.close();
+    } catch (_) {}
+    _channel = null;
+  }
+
+  void _setupChannel() {
+    _cleanupSocket();
 
     final uri = Uri.parse(_options.url);
     final factory = _options.channelFactory ??
         ((Uri u, {Iterable<String>? protocols}) =>
             WebSocketChannel.connect(u, protocols: protocols));
 
-    try {
-      _channel = factory(uri, protocols: _options.protocols);
-    } catch (error) {
-      if (!completer.isCompleted) {
-        completer.completeError(error);
-      }
-      rethrow;
-    }
+    _channel = factory(uri, protocols: _options.protocols);
 
     _subscription = _channel!.stream.listen(
       (event) {
@@ -128,24 +161,24 @@ class _UiClientImpl implements UiClient {
         } catch (_) {
           return;
         }
+
         if (message['type'] == 'handshake') {
           _connected = true;
-          if (!completer.isCompleted) {
-            completer.complete();
+          _currentDelay = _options.initialReconnectDelay;
+          _options.onConnectionStatusChanged?.call(true);
+
+          if (_handshakeCompleter != null && !_handshakeCompleter!.isCompleted) {
+            _handshakeCompleter!.complete();
           }
           return;
         }
         _onMessage(data);
       },
       onError: (Object error) {
-        if (!_connected && !completer.isCompleted) {
-          completer.completeError(
-            StateError('WebSocket connection failed: $error'),
-          );
-        }
+        _handleDisconnect(error);
       },
       onDone: () {
-        _connected = false;
+        _handleDisconnect(null);
       },
     );
 
@@ -154,19 +187,103 @@ class _UiClientImpl implements UiClient {
       'protocolVersion': protocolVersion,
       'sessionId': _options.sessionId,
       'capabilities': List<String>.from(clientCapabilities),
-      'clientInfo': {'platform': 'flutter'},
+      'clientInfo': {'platform': 'flutter', ...?_options.clientInfo},
+    });
+  }
+
+  void _handleDisconnect(Object? error) {
+    final wasConnected = _connected;
+    _connected = false;
+    _cleanupSocket();
+
+    if (_handshakeCompleter != null && !_handshakeCompleter!.isCompleted) {
+      _handshakeCompleter!.completeError(
+        StateError('WebSocket connection failed: $error'),
+      );
+    }
+
+    if (wasConnected) {
+      _options.onConnectionStatusChanged?.call(false);
+    }
+
+    if (_options.autoReconnect && !_manuallyDisconnected && !_disposed) {
+      _scheduleReconnect();
+    }
+  }
+
+  void _scheduleReconnect() {
+    if (_manuallyDisconnected || _disposed || _connected) return;
+    _reconnectTimer?.cancel();
+
+    _reconnectTimer = Timer(_currentDelay, () {
+      if (!_manuallyDisconnected && !_disposed && !_connected) {
+        _attemptReconnect();
+      }
     });
 
-    return completer.future;
+    // Exponential backoff
+    final nextMs = (_currentDelay.inMilliseconds * 1.5).round();
+    final maxMs = _options.maxReconnectDelay.inMilliseconds;
+    _currentDelay = Duration(milliseconds: nextMs > maxMs ? maxMs : nextMs);
+  }
+
+  Future<void> _attemptReconnect() async {
+    if (_manuallyDisconnected || _disposed || _connected) return;
+    try {
+      _setupChannel();
+    } catch (_) {
+      _scheduleReconnect();
+    }
+  }
+
+  @override
+  Future<void> connect() async {
+    _manuallyDisconnected = false;
+    _reconnectTimer?.cancel();
+    _currentDelay = _options.initialReconnectDelay;
+
+    _handshakeCompleter = Completer<void>();
+
+    try {
+      _setupChannel();
+    } catch (error) {
+      if (!_handshakeCompleter!.isCompleted) {
+        _handshakeCompleter!.completeError(error);
+      }
+      if (_options.autoReconnect && !_manuallyDisconnected) {
+        _scheduleReconnect();
+      }
+      rethrow;
+    }
+
+    return _handshakeCompleter!.future;
+  }
+
+  @override
+  Future<void> reconnectNow() async {
+    if (_connected || _manuallyDisconnected || _disposed) return;
+    _reconnectTimer?.cancel();
+    _currentDelay = _options.initialReconnectDelay;
+    await _attemptReconnect();
   }
 
   @override
   void disconnect() {
+    _manuallyDisconnected = true;
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
+    final wasConnected = _connected;
     _connected = false;
-    unawaited(_subscription?.cancel());
-    _subscription = null;
-    unawaited(_channel?.sink.close());
-    _channel = null;
+    _cleanupSocket();
+    if (wasConnected) {
+      _options.onConnectionStatusChanged?.call(false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    disconnect();
   }
 }
 

@@ -98,6 +98,23 @@ AppContext? _readContext(ExecuteContext ctx, {num? maxDestinations}) {
   return reader.read(maxDestinations: maxDestinations);
 }
 
+String _errorCodeFor(String message) {
+  const codes = [
+    'navigation_unavailable',
+    'element_not_found',
+    'not_actionable',
+    'invalid_arguments',
+    'blocked_by_policy',
+    'stale_snapshot',
+    'unknown_screen',
+    'timeout',
+  ];
+  for (final code in codes) {
+    if (message.contains(code)) return code;
+  }
+  return 'internal_error';
+}
+
 /// Execute a single UI command against the host tree / navigation adapter.
 Future<CommandResult> executeCommand(
   Command command,
@@ -370,13 +387,10 @@ Future<CommandResult> executeCommand(
     );
   } catch (error) {
     final message = error.toString();
-    final errorCode = message.contains('navigation_unavailable')
-        ? 'navigation_unavailable'
-        : 'internal_error';
     return buildCommandResult(
       command.callId,
       options: BuildResultOptions(
-        errorCode: errorCode,
+        errorCode: _errorCodeFor(message),
         errorMessage: message,
         snapshot: ctx.lastSnapshot,
       ),
